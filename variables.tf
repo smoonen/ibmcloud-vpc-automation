@@ -31,3 +31,33 @@ variable "allowed_ips" {
   description = "Allowed inbound IPs and CIDRs to public load balancer"
 }
 
+variable "ecdsa_private_key" {
+  type = string
+  description = "Private ECDSA host key for tier 1 servers"
+}
+
+variable "ecdsa_public_key" {
+  type = string
+  description = "Public ECDSA host key for tier 1 servers"
+}
+
+variable "ed25519_private_key" {
+  type = string
+  description = "Private ED25519 host key for tier 1 servers"
+}
+
+variable "ed25519_public_key" {
+  type = string
+  description = "Public ED25519 host key for tier 1 servers"
+}
+
+variable "rsa_private_key" {
+  type = string
+  description = "Private RSA host key for tier 1 servers"
+}
+
+variable "rsa_public_key" {
+  type = string
+  description = "Public RSA host key for tier 1 servers"
+}
+
