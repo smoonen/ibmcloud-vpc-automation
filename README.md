@@ -15,6 +15,8 @@ The two-tier "application" deployed by this is extremely simple. From the outsid
 
 All of the VSIs are enabled for outbound public network access by means of a public gateway.
 
+The application VSIs are configured with a common SSH host key so that they are interchangeable when reached through the load balancer. In our poor-man's architecture, this is the SSH equivalent of multiple web servers sharing the same server certificate.
+
 After provisioning, you can to SSH to the load balancer hostname to connect to one of the application VSIs, and then run `psql -h db-primary.example.com testdb appuser` without authentication. The secondary DB server is in read-only mode and is configured to listen as well, so that you can connect to it too.
 
 ## Notes
