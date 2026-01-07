@@ -15,6 +15,12 @@ POSTGRES_VERSION="16"
 DATA_DIR="/var/lib/postgresql/$${POSTGRES_VERSION}/main"
 CONFIG_DIR="/etc/postgresql/$${POSTGRES_VERSION}/main"
 
+# Allow-list configuration for test database
+ALLOWED_USER="appuser"
+ALLOWED_SUBNET1="${subnets_tier1[0].cidr}"
+ALLOWED_SUBNET2="${subnets_tier1[1].cidr}"
+ALLOWED_SUBNET3="${subnets_tier1[2].cidr}"
+
 # Logging
 LOG_FILE="/var/log/postgresql_standby_setup.log"
 exec 1> >(tee -a "$LOG_FILE")
@@ -160,6 +166,7 @@ fi
 cat >> "$${CONFIG_DIR}/postgresql.conf" <<EOF
 
 # Standby Server Settings
+listen_addresses = '*'
 hot_standby = on
 primary_slot_name = 'standby1_slot'
 restore_command = '/bin/true'
@@ -186,6 +193,16 @@ fi
 # Set proper permissions
 chown -R postgres:postgres $${DATA_DIR}
 chmod 0700 $${DATA_DIR}
+
+# Configure pg_hba.conf for allow-list
+echo "Configuring pg_hba.conf for allow-list..."
+cat >> "$${CONFIG_DIR}/pg_hba.conf" <<EOF
+
+# Allow-list: Trust authentication for specific user/subnet/database
+host    testdb          $${ALLOWED_USER}         $${ALLOWED_SUBNET1}       trust
+host    testdb          $${ALLOWED_USER}         $${ALLOWED_SUBNET2}       trust
+host    testdb          $${ALLOWED_USER}         $${ALLOWED_SUBNET3}       trust
+EOF
 
 # Start PostgreSQL
 echo "Starting PostgreSQL in standby mode..."

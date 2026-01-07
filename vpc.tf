@@ -295,6 +295,7 @@ resource "ibm_is_instance" "db_standby" {
   }
 
   user_data = templatefile("${path.module}/tier2_standby_init.sh", {
+    subnets_tier1 = local.subnets_tier1,
     replication_password = var.replication_password
   })
 }
