@@ -178,18 +178,6 @@ echo "Verifying replication configuration..."
 sudo -u postgres psql -c "SELECT * FROM pg_replication_slots;"
 sudo -u postgres psql -c "SELECT * FROM pg_stat_replication;"
 
-# Set up monitoring script
-cat > /usr/local/bin/check_replication_status.sh <<'SCRIPT'
-#!/bin/bash
-echo "=== Replication Status ==="
-sudo -u postgres psql -c "SELECT * FROM pg_stat_replication;"
-echo ""
-echo "=== Replication Slots ==="
-sudo -u postgres psql -c "SELECT * FROM pg_replication_slots;"
-SCRIPT
-
-chmod +x /usr/local/bin/check_replication_status.sh
-
 echo "=========================================="
 echo "Primary PostgreSQL Server Setup Complete"
 echo "Completed at: $(date)"
