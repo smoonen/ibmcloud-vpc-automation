@@ -61,3 +61,8 @@ variable "rsa_public_key" {
   description = "Public RSA host key for tier 1 servers"
 }
 
+variable "replication_password" {
+  type = string
+  description = "Password to use for PostgreSQL replication"
+}
+

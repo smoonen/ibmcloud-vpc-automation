@@ -203,7 +203,7 @@ resource "ibm_is_instance_template" "template" {
 }
 
 resource "ibm_is_instance_group" "instance_group" {
-  name              = "${var.prefix}-ig"
+  name              = "${var.prefix}-tier1"
   instance_template = ibm_is_instance_template.template.id
   instance_count    = 3
   subnets           = [for subnet in ibm_is_subnet.subnets_tier1 : subnet.id]
@@ -217,7 +217,7 @@ resource "ibm_is_instance_group" "instance_group" {
 }
 
 resource "ibm_is_instance_group_manager" "manager" {
-  name               = "${var.prefix}-igm"
+  name               = "${var.prefix}-tier1-mgr"
   instance_group     = ibm_is_instance_group.instance_group.id
   manager_type       = "autoscale"
   max_membership_count = 15
@@ -233,5 +233,88 @@ resource "ibm_is_instance_group_manager_policy" "expected_cpu" {
   metric_type         = "cpu"
   metric_value        = 85
   policy_type         = "target"
+}
+
+# Instance configuration for tier 2 VSIs. There will be a primary and a standby database server.
+resource "ibm_is_instance" "db_primary" {
+  name    = "${var.prefix}-tier2-primary"
+  image   = data.ibm_is_image.ubuntu.id
+  profile = "bxf-2x8"
+
+  primary_network_attachment {
+    name   = "eth0"
+    virtual_network_interface {
+      name            = "${var.prefix}-vni-tier2-primary"
+      subnet          = ibm_is_subnet.subnets_tier2[0].id
+      resource_group  = ibm_resource_group.resource_group.id
+      security_groups = [data.ibm_is_security_group.default_sg.id]
+      auto_delete     = true
+    }
+  }
+
+  vpc            = ibm_is_vpc.vpc.id
+  resource_group = ibm_resource_group.resource_group.id
+  zone           = "${var.region}-1"
+  keys           = [ibm_is_ssh_key.ssh_key.id]
+
+  boot_volume {
+    name               = "${var.prefix}-tier2-primary-boot"
+    auto_delete_volume = true
+  }
+
+  user_data = templatefile("${path.module}/tier2_primary_init.sh", {
+    subnets_tier1 = local.subnets_tier1,
+    replication_password = var.replication_password
+  })
+}
+
+resource "ibm_is_instance" "db_standby" {
+  name    = "${var.prefix}-tier2-standby"
+  image   = data.ibm_is_image.ubuntu.id
+  profile = "bxf-2x8"
+
+  primary_network_attachment {
+    name   = "eth0"
+    virtual_network_interface {
+      name            = "${var.prefix}-vni-tier2-standby"
+      subnet          = ibm_is_subnet.subnets_tier2[1].id
+      resource_group  = ibm_resource_group.resource_group.id
+      security_groups = [data.ibm_is_security_group.default_sg.id]
+      auto_delete     = true
+    }
+  }
+
+  vpc            = ibm_is_vpc.vpc.id
+  resource_group = ibm_resource_group.resource_group.id
+  zone           = "${var.region}-2"
+  keys           = [ibm_is_ssh_key.ssh_key.id]
+
+  boot_volume {
+    name               = "${var.prefix}-tier2-standby-boot"
+    auto_delete_volume = true
+  }
+
+  user_data = templatefile("${path.module}/tier2_standby_init.sh", {
+    replication_password = var.replication_password
+  })
+}
+
+# DNS records for primary and secondary
+resource "ibm_dns_resource_record" "db_primary" {
+  instance_id = ibm_resource_instance.dns_service.guid
+  zone_id     = ibm_dns_zone.dns_zone.zone_id
+  type        = "A"
+  name        = "db-primary"
+  rdata       = ibm_is_instance.db_primary.primary_network_attachment[0].primary_ip[0].address
+  ttl         = 300
+}
+
+resource "ibm_dns_resource_record" "db_standby" {
+  instance_id = ibm_resource_instance.dns_service.guid
+  zone_id     = ibm_dns_zone.dns_zone.zone_id
+  type        = "A"
+  name        = "db-standby"
+  rdata       = ibm_is_instance.db_standby.primary_network_attachment[0].primary_ip[0].address
+  ttl         = 300
 }
 
