@@ -176,7 +176,7 @@ resource "ibm_is_instance_template" "template" {
     virtual_network_interface {
       name            = "${var.prefix}-vni-tier1"
       subnet          = ibm_is_subnet.subnets_tier1[0].id
-      #resource_group  = ibm_resource_group.resource_group.id
+      #resource_group  = ibm_resource_group.resource_group.id # Not working currently
       security_groups = [data.ibm_is_security_group.default_sg.id]
       auto_delete     = true
     }
