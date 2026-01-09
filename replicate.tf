@@ -7,7 +7,7 @@ resource "ibm_iam_authorization_policy" "volume_policy" {
 
   resource_attributes {
     name     = "accountId"
-    value    = ibm_iam_account_settings.settings.id
+    value    = data.ibm_iam_account_settings.settings.id
   }
   resource_attributes {
     name     = "serviceName"
@@ -28,7 +28,7 @@ resource "ibm_iam_authorization_policy" "snapshot_policy" {
 
   resource_attributes {
     name     = "accountId"
-    value    = ibm_iam_account_settings.settings.id
+    value    = data.ibm_iam_account_settings.settings.id
   }
   resource_attributes {
     name     = "serviceName"
@@ -49,7 +49,7 @@ resource "ibm_iam_authorization_policy" "cgroup_policy" {
 
   resource_attributes {
     name     = "accountId"
-    value    = ibm_iam_account_settings.settings.id
+    value    = data.ibm_iam_account_settings.settings.id
   }
   resource_attributes {
     name     = "serviceName"
@@ -70,7 +70,7 @@ resource "ibm_iam_authorization_policy" "instance_policy" {
 
   resource_attributes {
     name     = "accountId"
-    value    = ibm_iam_account_settings.settings.id
+    value    = data.ibm_iam_account_settings.settings.id
   }
   resource_attributes {
     name     = "serviceName"

@@ -17,8 +17,8 @@ resource "ibm_dns_zone" "dns_zone" {
   instance_id = ibm_resource_instance.dns_service.guid
 }
 
-# Create an account settings resource so that we can leverage a side effect:
+# Discover account settings resource so that we can leverage a side effect:
 # The ID of this resource is the same as our account ID
-resource "ibm_iam_account_settings" "settings" {
+data "ibm_iam_account_settings" "settings" {
 }
 
