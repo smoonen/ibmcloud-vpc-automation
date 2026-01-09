@@ -41,16 +41,16 @@ The failover Terraform module is a standalone module; this enables it to operate
 The Terraform provider for IBM Cloud DNS does not allow you to modify existing resource records. Therefore you will need to import these three resources. The `query_dns.sh` script helps you to do this using the IBM Cloud CLI if you are already logged in. For example:
 
 ```bash
-> ibmcloud login --sso
-> ibmcloud plugin install cloud-dns-services
-> ./query_dns.sh
+$ ibmcloud login --sso
+$ ibmcloud plugin install cloud-dns-services
+$ ./query_dns.sh
 Run the following import commands after initializing your terraform workspace:
   terraform import ibm_dns_resource_record.app f6080ce1-8f60-483a-9e66-98c434099e63/59ad71f8-158d-4d10-a138-d351e5272713/CNAME:f3fc4e2f-7018-4148-9c8a-60a8feed9981
   terraform import ibm_dns_resource_record.db_primary f6080ce1-8f60-483a-9e66-98c434099e63/59ad71f8-158d-4d10-a138-d351e5272713/A:5bce7855-d712-4f45-a55b-2bef47daab88
   terraform import ibm_dns_resource_record.db_standby f6080ce1-8f60-483a-9e66-98c434099e63/59ad71f8-158d-4d10-a138-d351e5272713/A:2d08adc5-8f54-43ff-aacf-92680e0c112f
 ```
 
-After this you can apply the Terraform and the DNS records will be successfully updated together with the rest of the module.
+After this you can apply the Terraform, and the DNS records will be successfully updated together with the failover deployment.
 
 ## Notes
 
