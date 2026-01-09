@@ -15,7 +15,7 @@ This project is heavily inspired by: https://github.com/IBM/ibm-vpc-demo/. My th
 - `vpc_skeleton/` - a module used to create identical network configurations (VPC, address prefixes, subnets, load balancer) in two different regions
 - `terraform.tf` - provider specification
 - `variables.tf` - variable input specification
-- `globals.tf` - create many global resources such as resource group and DNS
+- `globals.tf` - create global resources such as resource group and DNS
 - `region1.tf` - create application and database, register in DNS
 - `replicate.tf` - create policy to snapshot database and copy it to recovery region
 - `region2_prep.tf` - create skeleton (VPC, addresss prefixes, subnets, load balancer, reserved IPs) in recovery region in preparation for failover
