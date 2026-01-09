@@ -17,9 +17,9 @@ CONFIG_DIR="/etc/postgresql/$${POSTGRES_VERSION}/main"
 
 # Allow-list configuration for test database
 ALLOWED_USER="appuser"
-ALLOWED_SUBNET1="${subnets_tier1[0].cidr}"
-ALLOWED_SUBNET2="${subnets_tier1[1].cidr}"
-ALLOWED_SUBNET3="${subnets_tier1[2].cidr}"
+ALLOWED_SUBNET1="${subnets_tier1[0].ipv4_cidr_block}"
+ALLOWED_SUBNET2="${subnets_tier1[1].ipv4_cidr_block}"
+ALLOWED_SUBNET3="${subnets_tier1[2].ipv4_cidr_block}"
 
 # Logging
 LOG_FILE="/var/log/postgresql_standby_setup.log"

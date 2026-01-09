@@ -5,7 +5,13 @@ variable "ibmcloud_api_key" {
 variable "region" {
   type        = string
   default     = "us-south"
-  description = "Name of the IBM Cloud region where the resources need to be provisioned.(Examples: us-east, us-south, etc.) For more information, see [Region and data center locations for resource deployment](https://cloud.ibm.com/docs/overview?topic=overview-locations)."
+  description = "Name of the IBM Cloud region where the resources need to be provisioned. (Examples: us-east, us-south, etc.) For more information, see [Region and data center locations for resource deployment](https://cloud.ibm.com/docs/overview?topic=overview-locations)."
+}
+
+variable "secondary_region" {
+  type        = string
+  default     = "us-east"
+  description = "Name of the secondary IBM Cloud region where resources will be replicated in preparation for disaster and failover."
 }
 
 variable "prefix" {

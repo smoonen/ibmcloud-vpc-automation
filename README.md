@@ -1,9 +1,23 @@
 # IBM Cloud VPC automation
-The primary purpose of this sample Terraform is to demonstrate the automation of a simple two-tier network architecture in IBM Cloud VPC.
+These sample Terraform modules are intended to demonstrate the automation of:
 
-The secondary purpose is to take that resulting architecture and demonstrate how to replicate or recreate various components of that architecture to another IBM Cloud region for disaster recovery purposes.
+1. A simple two-tier network architecture in IBM Cloud VPC;
+2. The creation of a skeleton of this architecture in a second VPC region;
+3. The replication of data to this second region for disaster recovery (DR) purposes, and
+4. The failover of the application to the second region.
 
-This project is heavily inspired by: https://github.com/IBM/ibm-vpc-demo/. My thanks to [IBM Bob](https://www.ibm.com/products/bob) for helping me to speedrun the PostgreSQL replication configuration.
+This project is heavily inspired by: https://github.com/IBM/ibm-vpc-demo/. My thanks to [IBM Bob](https://www.ibm.com/products/bob) for helping me to speedrun aspects of this configuration including the PostgreSQL replication configuration.
+
+## Orientation
+
+- `templates/` - this folder holds template boot scripts for the application and database VMs
+- `vpc_skeleton/` - a module used to create identical network configurations (VPC, address prefixes, subnets, load balancer) in two different regions
+- `terraform.tf` - provider specification
+- `variables.tf` - variable input specification
+- `globals.tf` - create many global resources such as resource group and DNS
+- `region1.tf` - create application and database, register in DNS
+- `replicate.tf` - create policy to snapshot database and copy it to recovery region
+- `region2_prep.tf` - create skeleton (VPC, addresss prefixes, subnets, load balancer, reserved IPs) in recovery region in preparation for failover
 
 ## Topology
 
