@@ -54,6 +54,8 @@ After this you can apply the Terraform, and the DNS records will be successfully
 
 ## Notes
 
+Individual storage snapshots are not managed by Terraform. As a result, you will be unable to successfully complete a `terraform destroy` until snapshots age out or unless you delete them; the resource group must remain in existence as long as there are snapshots in the group.
+
 Likely you would not use first-boot scripts to fully setup your systems, but would instead manage this using an image build pipeline, and/or and orchestration solution such as Ansible Tower.
 
 This is just a sample exercise of the replication and re-creation of resources in IBM Cloud VPC. See [this discussion on the VPC object model](https://fullvalence.com/2025/12/03/from-vmware-to-ibm-cloud-vpc-vsi-part-5-vpc-object-model/) for some considerations.
