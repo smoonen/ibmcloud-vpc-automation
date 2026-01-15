@@ -89,10 +89,9 @@ resource "ibm_is_security_group_rule" "inbound_sg_rules" {
   group     = ibm_is_security_group.inbound_sg.id
   direction = "inbound"
   remote    = each.value
-  tcp {
-    port_min = 22
-    port_max = 22
-  }
+  protocol  = "tcp"
+  port_min = 22
+  port_max = 22
 }
 
 data "ibm_is_security_group" "default_sg" {
